@@ -1,28 +1,30 @@
-#ifndef QUEUE_H
-#define QUEUE_H
+#pragma once
 
-#include "Aluno.h"
+template<typename T>
+struct QueueNode
+{
+    T data;
+    QueueNode* next;
 
-class Queue {
-private:
-    struct Node {
-        Aluno aluno;
-        Node* next;
-        Node(const Aluno& a) : aluno(a), next(nullptr) {}
-    };
-
-    Node* head;
-    Node* tail;
-
-public:
-    Queue();
-    // Destrutor (não implementado para simplicidade)
-    // ~Queue(); 
-    
-    bool isEmpty();
-    void enqueue(const Aluno& aluno);
-    Aluno dequeue();
-    Aluno front();
+    QueueNode(const T& value) : data(value), next(nullptr){}
 };
 
-#endif 
+template<typename T>
+class Queue
+{
+    private:
+        QueueNode<T>* head;
+        QueueNode<T>* tail;
+        int queueSize;
+
+    public:
+        Queue();
+        ~Queue();
+
+        bool isEmpty(); 
+        void push(const T& value); 
+        T pop();   
+        T front();
+        int size(); 
+        void clear();   
+};

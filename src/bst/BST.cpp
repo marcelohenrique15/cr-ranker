@@ -1,6 +1,7 @@
 #include "BST.h"
 
 BST::BST() : root(nullptr) {}
+BST::~BST(){}
 
 // Método público
 void BST::insert(double pontuacao, const Aluno& aluno) {
@@ -8,9 +9,9 @@ void BST::insert(double pontuacao, const Aluno& aluno) {
 }
 
 // Método privado recursivo
-BST::Node* BST::insert(Node* node, double pontuacao, const Aluno& aluno) {
+BSTNode* BST::insert(BSTNode* node, double pontuacao, const Aluno& aluno) {
     if (node == nullptr) {
-        return new Node(pontuacao, aluno);
+        return new BSTNode(pontuacao, aluno);
     }
 
     if (pontuacao < node->pontuacao) {
@@ -29,7 +30,7 @@ std::vector<Aluno> BST::getAlunosEmOrdemDesc() {
 }
 
 // Método privado recursivo para travessia em ordem decrescente
-void BST::inOrderDesc(Node* node, std::vector<Aluno>& result) {
+void BST::inOrderDesc(BSTNode* node, std::vector<Aluno>& result) {
     if (node == nullptr) {
         return;
     }

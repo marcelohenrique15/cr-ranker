@@ -1,5 +1,4 @@
-#ifndef TURMA_H
-#define TURMA_H
+#pragma once
 
 #include <string>
 #include "Aluno.h"
@@ -23,5 +22,3 @@ struct Turma {
     std::string cursoPrioritario;
     int periodoPrioritario;
 };
-
-#endif

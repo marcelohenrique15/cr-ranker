@@ -25,7 +25,7 @@ if %errorlevel% neq 0 (
 
 echo.
 echo ==== Executando programa ====
-cr-ranker.exe
+CR_RANKER.exe
 
 echo.
 pause

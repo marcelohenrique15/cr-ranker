@@ -1,39 +1,121 @@
 #include "Queue.h"
-#include <stdexcept>
+#include "Aluno.h"
+#include <iostream>
 
-Queue::Queue() : head(nullptr), tail(nullptr) {}
+using namespace std;
 
-bool Queue::isEmpty() {
-    return head == nullptr;
+// ############# PUBLIC #############
+//CONSTRUCTOR
+template<typename T>
+Queue<T>::Queue() : head(nullptr), tail(nullptr), queueSize(0) {}
+
+//DESTRUCTOR
+template<typename T>
+Queue<T>::~Queue()
+{
+    clear();
 }
 
-void Queue::enqueue(const Aluno& aluno) {
-    Node* newNode = new Node(aluno);
-    if (isEmpty()) {
+//MÉTODO: isEmpty()
+template<typename T>
+bool Queue<T>::isEmpty()
+{
+    if(head == nullptr)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+//MÉTODO: push()
+template<typename T>
+void Queue<T>::push(const T& value)
+{
+    QueueNode<T>* newNode = new QueueNode<T>(value);
+    
+    if(isEmpty())
+    {
         head = tail = newNode;
-    } else {
+    }
+
+    else
+    {
         tail->next = newNode;
         tail = newNode;
     }
+
+    queueSize++;
 }
 
-Aluno Queue::dequeue() {
-    if (isEmpty()) {
-        throw std::runtime_error("Queue is empty");
+//MÉTODO: pop()
+template<typename T>
+T Queue<T>::pop()
+{
+    if(isEmpty())
+    { 
+        throw out_of_range("ERROR: Void Queue");
     }
-    Node* temp = head;
-    Aluno aluno = head->aluno;
+
+    QueueNode<T>* temp = head;
+    T value = head->data;
     head = head->next;
-    if (head == nullptr) {
+
+    if(head == nullptr)
+    {
         tail = nullptr;
     }
+
     delete temp;
-    return aluno;
+    queueSize--;
+
+    return value;
 }
 
-Aluno Queue::front() {
-    if (isEmpty()) {
-        throw std::runtime_error("Queue is empty");
+//MÉTODO: front()
+template<typename T>
+T Queue<T>::front()
+{
+    if(isEmpty())
+    { 
+        throw out_of_range("ERROR: Void Queue");
     }
-    return head->aluno;
+
+    return head->data;
 }
+
+//MÉTODO: size()
+template<typename T>
+int Queue<T>::size()
+{
+    return queueSize;
+}
+
+//MÉTODO: clear()
+template<typename T>
+void Queue<T>::clear()
+{
+    while(!isEmpty())
+    {
+        pop();
+    }
+}
+
+// ################ TEMPLATES ###############
+template class Queue<char>;
+template class Queue<signed char>;
+template class Queue<unsigned char>;
+template class Queue<short>;
+template class Queue<unsigned short>;
+template class Queue<int>;
+template class Queue<unsigned int>;
+template class Queue<long>;
+template class Queue<unsigned long>;
+template class Queue<long long>;
+template class Queue<unsigned long long>;
+template class Queue<float>;
+template class Queue<double>;
+template class Queue<long double>;
+template class Queue<bool>;
+template class Queue<std::string>;
+template class Queue<Aluno>;

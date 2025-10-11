@@ -1,9 +1,9 @@
-#ifndef ALUNO_H
-#define ALUNO_H
+#pragma once
 
 #include <string>
 
-struct Aluno {
+struct Aluno 
+{
     int matricula;
     std::string nome;
     double coeficienteRendimento;
@@ -11,5 +11,3 @@ struct Aluno {
     std::string curso;
     bool processado = false; // Flag para controlar se o aluno já foi alocado/considerado
 };
-
-#endif 

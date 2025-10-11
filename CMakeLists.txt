@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Adiciona o executável principal e lista todos os arquivos .cpp
 add_executable(CR_RANKER 
-    main.cpp 
+    src/main.cpp 
     src/bst/BST.cpp 
     src/queue/Queue.cpp
 )

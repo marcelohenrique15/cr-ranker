@@ -25,7 +25,7 @@ void processarMatriculas(
     Turma& turma,
     std::vector<Aluno>& convocadosPrioridade,
     std::vector<Aluno>& convocadosRanking,
-    Queue& listaDeEspera) 
+    Queue<Aluno>& listaDeEspera) 
 {
     // Etapa 1: Alocação de Vagas Reservadas
     for (Aluno& aluno : todosAlunos) {
@@ -58,7 +58,7 @@ void processarMatriculas(
             turma.vagasOcupadas++;
         } else {
             // Etapa 4
-            listaDeEspera.enqueue(candidato);
+            listaDeEspera.push(candidato);
         }
     }
 }
@@ -96,7 +96,7 @@ int main() {
     // --- EXECUÇÃO ---
     std::vector<Aluno> convocadosPrioridade;
     std::vector<Aluno> convocadosRanking;
-    Queue listaDeEspera;
+    Queue<Aluno> listaDeEspera;
 
     std::cout << "Processando matrículas para a turma: " << turmaSI101.codigoDisciplina << std::endl;
     std::cout << "Total de Vagas: " << turmaSI101.totalVagas << std::endl << std::endl;
@@ -132,7 +132,7 @@ int main() {
     } else {
         int pos = 1;
         while(!listaDeEspera.isEmpty()) {
-            Aluno aluno = listaDeEspera.dequeue();
+            Aluno aluno = listaDeEspera.pop();
             double pontuacao = calcularPontuacao(aluno, turmaSI101);
             std::cout << pos++ << ".: Matricula: " << aluno.matricula << ", Nome: " << aluno.nome
                       << ", Pontuacao: " << std::fixed << std::setprecision(2) << pontuacao << std::endl;
