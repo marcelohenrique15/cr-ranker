@@ -24,6 +24,14 @@ if %errorlevel% neq 0 (
 )
 
 echo.
+echo ==== Preparando arquivos de dados ====
+copy ..\alunos.txt .
+
+if %errorlevel% neq 0 (
+    echo [AVISO] O arquivo alunos.txt nao foi encontrado no diretorio raiz e nao foi copiado.
+)
+
+echo.
 echo ==== Executando programa ====
 CR_RANKER.exe
 
