@@ -1,6 +1,7 @@
 #include "Queue.h"
-#include "Aluno.h"
+#include "Aluno.h" 
 #include <iostream>
+
 
 using namespace std;
 
@@ -20,12 +21,7 @@ Queue<T>::~Queue()
 template<typename T>
 bool Queue<T>::isEmpty()
 {
-    if(head == nullptr)
-    {
-        return true;
-    }
-
-    return false;
+    return head == nullptr;
 }
 
 //MÉTODO: push()
@@ -38,13 +34,11 @@ void Queue<T>::push(const T& value)
     {
         head = tail = newNode;
     }
-
     else
     {
         tail->next = newNode;
         tail = newNode;
     }
-
     queueSize++;
 }
 
@@ -52,11 +46,6 @@ void Queue<T>::push(const T& value)
 template<typename T>
 T Queue<T>::pop()
 {
-    if(isEmpty())
-    { 
-        throw out_of_range("ERROR: Void Queue");
-    }
-
     QueueNode<T>* temp = head;
     T value = head->data;
     head = head->next;
@@ -76,11 +65,6 @@ T Queue<T>::pop()
 template<typename T>
 T Queue<T>::front()
 {
-    if(isEmpty())
-    { 
-        throw out_of_range("ERROR: Void Queue");
-    }
-
     return head->data;
 }
 
@@ -100,6 +84,7 @@ void Queue<T>::clear()
         pop();
     }
 }
+
 
 // ################ TEMPLATES ###############
 template class Queue<char>;
