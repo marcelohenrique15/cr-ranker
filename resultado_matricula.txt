@@ -1,0 +1,17 @@
+--- ALUNOS CONVOCADOS (VAGA PRIORITARIA) ---
+Matricula: 101, Nome: Ana Silva
+Matricula: 102, Nome: Bruno Costa
+Matricula: 107, Nome: Gabriel Santos
+
+--- ALUNOS CONVOCADOS (RANKING GERAL) ---
+Matricula: 106, Nome: Fernanda Alves, Pontuacao: 136.00
+Matricula: 104, Nome: Daniela Rocha, Pontuacao: 135.00
+
+--- LISTA DE ESPERA (POR ORDEM DE CLASSIFICACAO) ---
+1.: Matricula: 108, Nome: Heloisa Matos, Pontuacao: 128.00
+2.: Matricula: 110, Nome: Julia Andrade, Pontuacao: 108.00
+3.: Matricula: 109, Nome: Igor Pereira, Pontuacao: 107.00
+4.: Matricula: 105, Nome: Eduardo Lima, Pontuacao: 104.00
+5.: Matricula: 103, Nome: Carlos Dias, Pontuacao: 88.00
+
+Total de Vagas Ocupadas: 5/5

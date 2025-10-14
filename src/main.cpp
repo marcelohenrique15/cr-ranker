@@ -1,11 +1,60 @@
 #include <iostream>
 #include <vector>
 #include <iomanip>
+#include <fstream>
+#include <sstream>
 
 #include "Aluno.h"
 #include "Turma.h"
 #include "BST.h"
 #include "Queue.h"
+#define VAGAS_SI101 5
+
+using namespace std;
+
+vector<Aluno> carregarAlunos(const string& nomeArquivo) {
+    vector<Aluno> alunos;
+    ifstream arquivo_entrada(nomeArquivo);
+    string linha;
+
+    if (!arquivo_entrada.is_open()){
+        cerr << "Não foi possível abrir o arquivo " << nomeArquivo << endl;
+        return alunos;
+    }
+
+    while (getline(arquivo_entrada, linha)) {
+        stringstream ss(linha);
+        string campo;
+        Aluno novoAluno;
+
+        if (linha.empty() || linha[0] == '#') {
+            continue; // Pula para a próxima linha se vazio ou comentário
+        }
+
+        // Matricula (int)
+        getline(ss, campo, ',');
+        try { novoAluno.matricula = stoi(campo); } catch (...) { continue; }
+
+        // Nome (str)
+        getline(ss, novoAluno.nome, ',');
+
+        // Coeficiente de Rendimento (double)
+        getline(ss, campo, ',');
+        try { novoAluno.coeficienteRendimento = stod(campo); } catch (...) { continue; }
+
+        // Periodo (int)
+        getline(ss, campo, ',');
+        try { novoAluno.periodo = stoi(campo); } catch (...) { continue; }
+
+        // Curso (str)
+        getline(ss, novoAluno.curso);
+
+        alunos.push_back(novoAluno);
+    }
+
+    arquivo_entrada.close();
+    return alunos;
+}
 
 // Função auxiliar para calcular a pontuação de um aluno para uma turma específica
 double calcularPontuacao(const Aluno& aluno, const Turma& turma) {
@@ -21,10 +70,10 @@ double calcularPontuacao(const Aluno& aluno, const Turma& turma) {
 
 // Função principal de processamento
 void processarMatriculas(
-    std::vector<Aluno>& todosAlunos, 
+    vector<Aluno>& todosAlunos, 
     Turma& turma,
-    std::vector<Aluno>& convocadosPrioridade,
-    std::vector<Aluno>& convocadosRanking,
+    vector<Aluno>& convocadosPrioridade,
+    vector<Aluno>& convocadosRanking,
     Queue<Aluno>& listaDeEspera) 
 {
     // Etapa 1: Alocação de Vagas Reservadas
@@ -48,7 +97,7 @@ void processarMatriculas(
     }
 
     // Obter lista ordenada de candidatos
-    std::vector<Aluno> candidatosOrdenados = rankingBst.getAlunosEmOrdemDesc();
+    vector<Aluno> candidatosOrdenados = rankingBst.getAlunosEmOrdemDesc();
 
     // Etapa 3 e 4: Preenchimento das vagas por ranking e criação da lista de espera
     for (const Aluno& candidato : candidatosOrdenados) {
@@ -65,81 +114,82 @@ void processarMatriculas(
 
 
 int main() {
-    // --- DADOS DE TESTE ---
+    ofstream saida("../resultado_matricula.txt");
+
+    if (!saida.is_open()){
+        cerr << "Nao foi possivel criar o arquivo de saida" << endl;
+        return 1;
+    }
+
+    vector<Aluno> alunos = carregarAlunos("alunos.txt");
 
     Turma turmaSI101 = {
-        /*codigoDisciplina*/ "SI101 - Algoritmos Avançados",
-        /*totalVagas*/       5,
-        /*vagasOcupadas*/    0, // Valor inicial padrão
-        /*pesos*/            { 
-                            /*pesoCR*/ 10.0, 
-                            /*pesoPeriodo*/ 5.0, 
-                            /*pesoCursoBonus*/ 20.0 
-                            },
-        /*cursoPrioritario*/ "Sistemas de Informacao",
-        /*periodoPrioritario*/ 3
-    };
-
-    std::vector<Aluno> alunos = {
-        {101, "Ana Silva", 8.5, 3, "Sistemas de Informacao"},      // Prioritário
-        {102, "Bruno Costa", 9.2, 3, "Sistemas de Informacao"},      // Prioritário
-        {103, "Carlos Dias", 7.8, 2, "Engenharia de Software"},
-        {104, "Daniela Rocha", 9.5, 4, "Sistemas de Informacao"},    // Alta pontuação
-        {105, "Eduardo Lima", 8.9, 3, "Ciencia da Computacao"},
-        {106, "Fernanda Alves", 9.1, 5, "Sistemas de Informacao"},   // Alta pontuação
-        {107, "Gabriel Santos", 7.0, 3, "Sistemas de Informacao"},      // Prioritário (mas CR baixo)
-        {108, "Heloisa Matos", 9.8, 6, "Engenharia de Software"},   // Maior CR
-        {109, "Igor Pereira", 8.2, 1, "Sistemas de Informacao"},
-        {110, "Julia Andrade", 8.8, 4, "Ciencia da Computacao"}
+        "SI101 - Algoritmos Avançados", // Codigo Disciplina
+        VAGAS_SI101, // Total Vagas
+        0, // Vagas Ocupadas (0 por padrão)
+        { // Pesos
+            10.0, // Peso CR
+            5.0, // Peso Periodo
+            20.0 // Peso Bonus de Curso
+        },
+        "Sistemas de Informacao", // Curso Prioritario
+        3 // Periodo Prioritario
     };
 
     // --- EXECUÇÃO ---
-    std::vector<Aluno> convocadosPrioridade;
-    std::vector<Aluno> convocadosRanking;
+    vector<Aluno> convocadosPrioridade;
+    vector<Aluno> convocadosRanking;
     Queue<Aluno> listaDeEspera;
 
-    std::cout << "Processando matrículas para a turma: " << turmaSI101.codigoDisciplina << std::endl;
-    std::cout << "Total de Vagas: " << turmaSI101.totalVagas << std::endl << std::endl;
+    cout << "Processando matrículas para a turma: " << turmaSI101.codigoDisciplina << endl;
+    cout << "Total de Vagas: " << turmaSI101.totalVagas << endl << endl;
 
     processarMatriculas(alunos, turmaSI101, convocadosPrioridade, convocadosRanking, listaDeEspera);
 
     // --- APRESENTAÇÃO DOS RESULTADOS ---
-    std::cout << "--- ALUNOS CONVOCADOS (VAGA PRIORITARIA) ---" << std::endl;
+    // --- APRESENTAÇÃO DOS RESULTADOS (TODOS OS COUT TROCADOS POR 'SAIDA') ---
+    saida << "--- ALUNOS CONVOCADOS (VAGA PRIORITARIA) ---" << endl;
     if (convocadosPrioridade.empty()) {
-        std::cout << "Nenhum aluno convocado por prioridade." << std::endl;
+        saida << "Nenhum aluno convocado por prioridade." << endl;
     } else {
         for(const auto& aluno : convocadosPrioridade) {
-            std::cout << "Matricula: " << aluno.matricula << ", Nome: " << aluno.nome << std::endl;
+            saida << "Matricula: " << aluno.matricula << ", Nome: " << aluno.nome << endl;
         }
     }
-    std::cout << std::endl;
+    saida << endl;
 
-    std::cout << "--- ALUNOS CONVOCADOS (RANKING GERAL) ---" << std::endl;
+    saida << "--- ALUNOS CONVOCADOS (RANKING GERAL) ---" << endl;
     if (convocadosRanking.empty()) {
-        std::cout << "Nenhum aluno convocado por ranking." << std::endl;
+        saida << "Nenhum aluno convocado por ranking." << endl;
     } else {
         for(const auto& aluno : convocadosRanking) {
             double pontuacao = calcularPontuacao(aluno, turmaSI101);
-            std::cout << "Matricula: " << aluno.matricula << ", Nome: " << aluno.nome 
-                      << ", Pontuacao: " << std::fixed << std::setprecision(2) << pontuacao << std::endl;
+            saida << "Matricula: " << aluno.matricula << ", Nome: " << aluno.nome 
+                          << ", Pontuacao: " << fixed << setprecision(2) << pontuacao << endl;
         }
     }
-    std::cout << std::endl;
+    saida << endl;
 
-    std::cout << "--- LISTA DE ESPERA (POR ORDEM DE CLASSIFICACAO) ---" << std::endl;
+    saida << "--- LISTA DE ESPERA (POR ORDEM DE CLASSIFICACAO) ---" << endl;
     if (listaDeEspera.isEmpty()) {
-        std::cout << "Nao ha alunos na lista de espera." << std::endl;
+        saida << "Nao ha alunos na lista de espera." << endl;
     } else {
         int pos = 1;
         while(!listaDeEspera.isEmpty()) {
             Aluno aluno = listaDeEspera.pop();
             double pontuacao = calcularPontuacao(aluno, turmaSI101);
-            std::cout << pos++ << ".: Matricula: " << aluno.matricula << ", Nome: " << aluno.nome
-                      << ", Pontuacao: " << std::fixed << std::setprecision(2) << pontuacao << std::endl;
+            saida << pos++ << ".: Matricula: " << aluno.matricula << ", Nome: " << aluno.nome
+                          << ", Pontuacao: " << fixed << setprecision(2) << pontuacao << endl;
         }
     }
-    std::cout << std::endl;
-    std::cout << "Total de Vagas Ocupadas: " << turmaSI101.vagasOcupadas << "/" << turmaSI101.totalVagas << std::endl;
+    saida << endl;
+    saida << "Total de Vagas Ocupadas: " << turmaSI101.vagasOcupadas << "/" << turmaSI101.totalVagas << endl;
+
+    // 2. FECHAR ARQUIVO DE SAÍDA
+    saida.close();
+    
+    // Informa o usuário no console que a operação foi concluída.
+    cout << "Processamento concluido. Resultados salvos em 'resultado_matricula.txt'." << endl;
 
     return 0;
 }
