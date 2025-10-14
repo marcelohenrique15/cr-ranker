@@ -1,9 +1,7 @@
 #include "Queue.h"
-#include "Aluno.h" 
-#include <iostream>
+#include <string>
 
-
-using namespace std;
+#include "Aluno.h"
 
 // ############# PUBLIC #############
 //CONSTRUCTOR
@@ -19,14 +17,14 @@ Queue<T>::~Queue()
 
 //MÉTODO: isEmpty()
 template<typename T>
-bool Queue<T>::isEmpty()
+bool Queue<T>::isEmpty() const
 {
     return head == nullptr;
 }
 
-//MÉTODO: push()
+//MÉTODO: enqueue()
 template<typename T>
-void Queue<T>::push(const T& value)
+void Queue<T>::enqueue(const T& value)
 {
     QueueNode<T>* newNode = new QueueNode<T>(value);
     
@@ -42,10 +40,14 @@ void Queue<T>::push(const T& value)
     queueSize++;
 }
 
-//MÉTODO: pop()
+//MÉTODO: dequeue()
 template<typename T>
-T Queue<T>::pop()
+T Queue<T>::dequeue()
 {
+    if (isEmpty()) {
+        throw std::runtime_error("Erro: Tentativa de remover de uma fila vazia.");
+    }
+
     QueueNode<T>* temp = head;
     T value = head->data;
     head = head->next;
@@ -63,14 +65,27 @@ T Queue<T>::pop()
 
 //MÉTODO: front()
 template<typename T>
-T Queue<T>::front()
+T& Queue<T>::front()
 {
+    if (isEmpty()) {
+        throw std::runtime_error("Erro: Tentativa de acessar o início de uma fila vazia.");
+    }
     return head->data;
 }
 
+template<typename T>
+const T& Queue<T>::front() const
+{
+    if (isEmpty()) {
+        throw std::runtime_error("Erro: Tentativa de acessar o início de uma fila vazia.");
+    }
+    return head->data;
+}
+
+
 //MÉTODO: size()
 template<typename T>
-int Queue<T>::size()
+int Queue<T>::size() const
 {
     return queueSize;
 }
@@ -81,12 +96,13 @@ void Queue<T>::clear()
 {
     while(!isEmpty())
     {
-        pop();
+        dequeue();
     }
 }
 
 
 // ################ TEMPLATES ###############
+
 template class Queue<char>;
 template class Queue<signed char>;
 template class Queue<unsigned char>;
