@@ -13,6 +13,8 @@ add_executable(CR_RANKER
     src/main.cpp 
     src/bst/BST.cpp 
     src/queue/Queue.cpp
+    src/hashtable/Hashtable.cpp
+    src/system/System.cpp
 )
 
 # Informa ao compilador onde encontrar os arquivos de cabeçalho (.h)
