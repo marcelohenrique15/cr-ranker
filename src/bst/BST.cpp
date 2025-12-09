@@ -1,43 +1,114 @@
+#include <iostream>
 #include "BST.h"
+#include "Student.h"
+
+using namespace std;
 
 BST::BST() : root(nullptr) {}
-BST::~BST(){}
 
-// Método público
-void BST::insert(double pontuacao, const Aluno& aluno) {
-    root = insert(root, pontuacao, aluno);
+BSTNode* BST::getMinValueNode(BSTNode* node)
+{
+    BSTNode* current = node;
+    while(current->left != nullptr)
+    {
+        current = current->left;
+    }
+
+    return current;
 }
 
-// Método privado recursivo
-BSTNode* BST::insert(BSTNode* node, double pontuacao, const Aluno& aluno) {
-    if (node == nullptr) {
-        return new BSTNode(pontuacao, aluno);
+BSTNode* BST::insertHelper(BSTNode* node, const Student& key)
+{
+    if(node == nullptr)
+    {
+        return new BSTNode(key);
     }
 
-    if (pontuacao < node->pontuacao) {
-        node->left = insert(node->left, pontuacao, aluno);
-    } else { // >= para tratar pontuações iguais
-        node->right = insert(node->right, pontuacao, aluno);
+    if(key.registration < node->key.registration)
+    {
+        node->left = insertHelper(node->left, key);
     }
+
+    else if(key.registration > node->key.registration)
+    {
+        node->right = insertHelper(node->right, key);
+    }
+
     return node;
 }
 
-// Método público
-std::vector<Aluno> BST::getAlunosEmOrdemDesc() {
-    std::vector<Aluno> result;
-    inOrderDesc(root, result);
-    return result;
+BSTNode* BST::removeHelper(BSTNode* node, const Student& key)
+{
+    if(node == nullptr)
+    {
+        return node;
+    }
+
+    if(key.registration < node->key.registration)
+    {
+        node->left = removeHelper(node->left, key);
+    }
+
+    else if(key.registration > node->key.registration)
+    {
+        node->right = removeHelper(node->right, key);
+    }
+
+    else
+    {
+        if(node->left == nullptr)
+        {
+            BSTNode* temp = node->right;
+            delete node;
+            return temp;
+        }
+
+        else if(node->right == nullptr)
+        {
+            BSTNode* temp = node->left;
+            delete node;
+            return temp;
+        }
+
+        BSTNode* temp = getMinValueNode(node->right);
+        node->key = temp->key;
+        node->right = removeHelper(node->right, temp->key);
+    }
+
+    return node;
 }
 
-// Método privado recursivo para travessia em ordem decrescente
-void BST::inOrderDesc(BSTNode* node, std::vector<Aluno>& result) {
-    if (node == nullptr) {
-        return;
+BSTNode* BST::searchHelper(BSTNode* node, const int& key)
+{
+    if(node == nullptr || node->key.registration == key)
+    {
+        return node;
     }
-    // 1. Visita a sub-árvore direita (maiores pontuações)
-    inOrderDesc(node->right, result);
-    // 2. Adiciona o nó atual
-    result.push_back(node->aluno);
-    // 3. Visita a sub-árvore esquerda (menores pontuações)
-    inOrderDesc(node->left, result);
+
+    if(key < node->key.registration)
+    {
+        return searchHelper(node->left, key);
+    }
+
+    else
+    {
+        return searchHelper(node->right, key);
+    }
+}
+
+void BST::insert(const Student& student)
+{
+    root = insertHelper(root, student);
+}
+
+void BST::remove(const Student& student)
+{
+    root = removeHelper(root, student);
+}
+
+Student* BST::search(const int& key)
+{
+    BSTNode* node = searchHelper(root, key);
+    if (node == nullptr) return nullptr;
+    return &(node->key);
 }

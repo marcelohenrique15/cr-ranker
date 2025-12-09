@@ -1,28 +1,35 @@
 #pragma once
 
 #include <vector>
-#include "Aluno.h"
+#include "Student.h"
 
 struct BSTNode {
-        double pontuacao;
-        Aluno aluno;
-        BSTNode* left;
-        BSTNode* right;
+    Student key;
+    BSTNode* left;
+    BSTNode* right;
 
-        BSTNode(const double& p, const Aluno& a) : pontuacao(p), aluno(a), left(nullptr), right(nullptr) {}
+    BSTNode(const Student& k) : key(k), left(nullptr), right(nullptr) {}
 };
 
 class BST {
-private:
-    BSTNode* root;
+    private:
+        BSTNode* root;
 
-    BSTNode* insert(BSTNode* node, double pontuacao, const Aluno& aluno);
-    void inOrderDesc(BSTNode* node, std::vector<Aluno>& result);
+        // Helpers
+        BSTNode* insertHelper(BSTNode* node, const Student& student);
+        BSTNode* removeHelper(BSTNode* node, const Student& student);
+        BSTNode* searchHelper(BSTNode* node, const int& key);
 
-public:
-    BST();
-    ~BST(); 
+        // Utils
+        BSTNode* getMinValueNode(BSTNode* node);
+        void merge(std::vector<Student>& arr, int left, int mid, int right);
+        void mergeSort(std::vector<Student>& arr, int left, int right);
+        
+    public:
+        BST();
 
-    void insert(double pontuacao, const Aluno& aluno);
-    std::vector<Aluno> getAlunosEmOrdemDesc();
+        void insert(const Student& student);
+        void remove(const Student& student);
+        Student* search(const int& key);
+        void sort(std::vector<Student>& arr);
 };

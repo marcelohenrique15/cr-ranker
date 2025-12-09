@@ -1,8 +1,7 @@
 #pragma once
-#include <cstdlib> 
-#include <new>     
+#include <stdexcept>
 
-template<typename T>
+template <typename T>
 struct QueueNode
 {
     T data;
@@ -10,18 +9,9 @@ struct QueueNode
 
     QueueNode(const T& value) : data(value), next(nullptr) {}
 
-    void* operator new(size_t size)
-    {
-        return malloc(size);
-    }
-
-    void operator delete(void* pointer)
-    {
-        free(pointer);
-    }
 };
 
-template<typename T>
+template <typename T>
 class Queue
 {
 private:
@@ -33,10 +23,11 @@ public:
     Queue();
     ~Queue();
 
-    bool isEmpty();
-    void push(const T& value);
-    T pop();
-    T front();
-    int size();
+    bool isEmpty() const;
+    void enqueue(const T& value); 
+    T dequeue();                  
+    T& front();
+    const T& front() const;
+    int size() const;
     void clear();
 };
