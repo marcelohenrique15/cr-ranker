@@ -1,7 +1,7 @@
 #pragma once
 #include <stdexcept>
 
-template<typename T>
+template <typename T>
 struct QueueNode
 {
     T data;
@@ -11,7 +11,7 @@ struct QueueNode
 
 };
 
-template<typename T>
+template <typename T>
 class Queue
 {
 private:

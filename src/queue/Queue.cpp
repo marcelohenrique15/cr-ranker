@@ -1,7 +1,7 @@
 #include "Queue.h"
 #include <string>
 
-#include "Aluno.h"
+#include "Student.h"
 
 // ############# PUBLIC #############
 //CONSTRUCTOR
@@ -119,4 +119,4 @@ template class Queue<double>;
 template class Queue<long double>;
 template class Queue<bool>;
 template class Queue<std::string>;
-template class Queue<Aluno>;
+template class Queue<Student>;
