@@ -9,6 +9,12 @@ O objetivo é desenvolver um algoritmo que faça a ordenação dos alunos para a
 - Curso
 - Período
 
+## Algorítmos utilizados
+- Árvore Binária de Busca
+- Fila
+- Hash Table
+- Merge Sort
+ 
 ## ⚙️ Como Rodar o Projeto
 
 1.  **Clone o Repositório**
@@ -24,34 +30,16 @@ O objetivo é desenvolver um algoritmo que faça a ordenação dos alunos para a
     # Instalar o CMAKE (Linux)
     sudo apt update && sudo apt install cmake
     ```
-
-3.  **Ajuste o Arquivo de Entrada**
-
+3.  **Dê permissão para o script run_linux.sh**
     ```bash
-    # Coloque os alunos da forma que quiser, seguindo o seguinte padrão:
-    # Formato: Matricula, Nome, CR, Periodo, Curso
-    # Exemplo:
-    101,Ana Silva,8.5,3,Sistemas de Informacao
-    102,Bruno Costa,9.2,3,Sistemas de Informacao
-    103,Carlos Dias,7.8,2,Engenharia de Software
-    104,Daniela Rocha,9.5,4,Sistemas de Informacao
-    105,Eduardo Lima,8.9,3,Ciencia da Computacao
-    106,Fernanda Alves,9.1,5,Sistemas de Informacao
-    107,Gabriel Santos,7.0,3,Sistemas de Informacao
-    108,Heloisa Matos,9.8,6,Engenharia de Software
-    109,Igor Pereira,8.2,1,Sistemas de Informacao
-    110,Julia Andrade,8.8,4,Ciencia da Computacao
+    # No Linux
+    sudo chmod +x run_linux.sh
     ```
-
+    
 4.  **Execute o Programa**
     ```bash
     # No Linux
     ./run_linux.sh
-
-    # No Windows
-    mkdir src\output
-    g++ -Wall -Wextra -g3 -std=c++17 -I include src/main.cpp src/bst/BST.cpp src/queue/Queue.cpp -o src/output/main.exe
-    src\output\main.exe
     ```
 
 ## 👤 Autores
